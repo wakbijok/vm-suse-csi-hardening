@@ -1,8 +1,12 @@
----
 # roles/initial_setup/tasks/main.yml
+- name: Get current date
+  command: date +%Y%m%d
+  register: date_output
+  changed_when: false
+
 - name: Create backup directory
   file:
-    path: "/root/hardening_backup_{{ ansible_date_time.date }}"
+    path: "/root/hardening_backup_{{ date_output.stdout }}"
     state: directory
     mode: '0700'
     owner: root
@@ -11,22 +15,22 @@
 - name: Backup critical files
   copy:
     src: "{{ item }}"
-    dest: "/root/hardening_backup_{{ ansible_date_time.date }}/"
+    dest: "/root/hardening_backup_{{ date_output.stdout }}/"
     remote_src: yes
   with_items:
     - /etc/fstab
     - /etc/ssh/sshd_config
     - /etc/security/limits.conf
 
-- name: Configure /tmp mount options
-  mount:
-    path: /tmp
-    src: "{{ item.device }}"
-    fstype: "{{ item.fstype }}"
-    opts: "defaults,nodev,nosuid,noexec"
-    state: mounted
-  when: item.mount == '/tmp'
-  with_items: "{{ ansible_mounts }}"
+# - name: Configure /tmp mount options
+#   mount:
+#     path: /tmp
+#     src: "{{ item.device }}"
+#     fstype: "{{ item.fstype }}"
+#     opts: "defaults,nodev,nosuid,noexec"
+#     state: mounted
+#   when: item.mount == '/tmp'
+#   with_items: "{{ ansible_mounts }}"
 
 - name: Set boot loader configuration permissions
   file:

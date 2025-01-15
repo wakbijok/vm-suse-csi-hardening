@@ -3,6 +3,8 @@
 - name: SLES CIS Hardening
   hosts: sles_server
   become: true
+  gather_facts: false
+  
   roles:
     - initial_setup
     - services

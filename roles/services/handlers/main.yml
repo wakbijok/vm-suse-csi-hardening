@@ -1,0 +1,6 @@
+---
+# roles/services/handlers/main.yml
+- name: restart chronyd
+  service:
+    name: chronyd
+    state: restarted

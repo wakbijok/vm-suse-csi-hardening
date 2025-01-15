@@ -7,14 +7,14 @@
     enabled: false
   with_items:
     - autofs
-    - cups
-    - dhcpd
-    - avahi-daemon
-    - kdump
-    - named
+    # - cups
+    # - dhcpd
+    # - avahi-daemon
+    # - kdump
+    # - named
     - nfs
     - rpcbind
-    - vsftpd
+    # - vsftpd
 
 - name: Configure chronyd
   template:

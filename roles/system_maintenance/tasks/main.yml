@@ -10,7 +10,7 @@
     - { path: '/etc/passwd', mode: '0644' }
     - { path: '/etc/shadow', mode: '0000' }
     - { path: '/etc/group', mode: '0644' }
-    - { path: '/etc/gshadow', mode: '0000' }
+    # - { path: '/etc/gshadow', mode: '0000' }
 
 - name: Find world-writable files
   command: find / -xdev -type f -perm -0002

@@ -8,11 +8,11 @@
     group: root
     mode: '0644'
 
-- name: Configure process accounting
-  service:
-    name: psacct
-    state: started
-    enabled: true
+# - name: Configure process accounting
+#   service:
+#     name: psacct
+#     state: started
+#     enabled: true
 
 - name: Configure filesystem blacklisting
   copy:

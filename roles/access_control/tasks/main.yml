@@ -13,12 +13,12 @@
     group: root
     mode: '0644'
 
-- name: Set password reuse limits
-  lineinfile:
-    path: /etc/pam.d/password-auth
-    regexp: '^password\s+sufficient\s+pam_unix.so'
-    line: 'password sufficient pam_unix.so remember=5 sha512'
-    state: present
+# - name: Set password reuse limits
+#   lineinfile:
+#     path: /etc/pam.d/password-auth
+#     regexp: '^password\s+sufficient\s+pam_unix.so'
+#     line: 'password sufficient pam_unix.so remember=5 sha512'
+#     state: present
 
 - name: Set default umask
   copy:
