@@ -1,0 +1,29 @@
+---
+# roles/level2_hardening/tasks/main.yml
+- name: Disable USB Storage
+  copy:
+    content: "install usb-storage /bin/false"
+    dest: /etc/modprobe.d/usb-storage.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure process accounting
+  service:
+    name: psacct
+    state: started
+    enabled: true
+
+- name: Configure filesystem blacklisting
+  copy:
+    content: |
+      install {{ item }} /bin/false
+      blacklist {{ item }}
+    dest: "/etc/modprobe.d/{{ item }}.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - cramfs
+    - squashfs
+    - udf

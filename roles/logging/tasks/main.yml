@@ -1,0 +1,16 @@
+---
+# roles/logging/tasks/main.yml
+- name: Configure audit rules
+  template:
+    src: audit.rules.j2
+    dest: /etc/audit/rules.d/hardening.rules
+    owner: root
+    group: root
+    mode: '0600'
+  notify: restart auditd
+
+- name: Enable auditd service
+  service:
+    name: auditd
+    state: started
+    enabled: true

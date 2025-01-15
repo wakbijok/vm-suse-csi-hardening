@@ -1,0 +1,24 @@
+---
+# roles/system_maintenance/tasks/main.yml
+- name: Set critical file permissions
+  file:
+    path: "{{ item.path }}"
+    mode: "{{ item.mode }}"
+    owner: root
+    group: root
+  with_items:
+    - { path: '/etc/passwd', mode: '0644' }
+    - { path: '/etc/shadow', mode: '0000' }
+    - { path: '/etc/group', mode: '0644' }
+    - { path: '/etc/gshadow', mode: '0000' }
+
+- name: Find world-writable files
+  command: find / -xdev -type f -perm -0002
+  register: world_writable_files
+  changed_when: false
+
+- name: Remove world-writable permissions
+  file:
+    path: "{{ item }}"
+    mode: "go-w"
+  with_items: "{{ world_writable_files.stdout_lines }}"

@@ -1,0 +1,26 @@
+---
+# roles/services/tasks/main.yml
+- name: Disable unnecessary services
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  with_items:
+    - autofs
+    - cups
+    - dhcpd
+    - avahi-daemon
+    - kdump
+    - named
+    - nfs
+    - rpcbind
+    - vsftpd
+
+- name: Configure chronyd
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart chronyd

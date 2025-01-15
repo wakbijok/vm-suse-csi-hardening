@@ -1,0 +1,46 @@
+---
+# roles/initial_setup/tasks/main.yml
+- name: Create backup directory
+  file:
+    path: "/root/hardening_backup_{{ ansible_date_time.date }}"
+    state: directory
+    mode: '0700'
+    owner: root
+    group: root
+
+- name: Backup critical files
+  copy:
+    src: "{{ item }}"
+    dest: "/root/hardening_backup_{{ ansible_date_time.date }}/"
+    remote_src: yes
+  with_items:
+    - /etc/fstab
+    - /etc/ssh/sshd_config
+    - /etc/security/limits.conf
+
+- name: Configure /tmp mount options
+  mount:
+    path: /tmp
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
+    opts: "defaults,nodev,nosuid,noexec"
+    state: mounted
+  when: item.mount == '/tmp'
+  with_items: "{{ ansible_mounts }}"
+
+- name: Set boot loader configuration permissions
+  file:
+    path: /boot/grub2/grub.cfg
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Configure kernel parameters for security
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_file: "/etc/sysctl.d/50-security.conf"
+  with_items:
+    - { name: 'kernel.randomize_va_space', value: '2' }
+    - { name: 'fs.suid_dumpable', value: '0' }

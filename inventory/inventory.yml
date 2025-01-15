@@ -1,0 +1,8 @@
+---
+# inventory.yml
+all:
+  hosts:
+    sles_server:
+      ansible_host: 10.23.171.150
+      ansible_user: administrator
+      ansible_ssh_private_key_file: /Users/wakbijak/Nextcloud/DevOps/keys/administrator

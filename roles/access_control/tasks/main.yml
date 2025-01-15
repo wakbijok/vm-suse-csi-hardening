@@ -1,0 +1,40 @@
+---
+# roles/access_control/tasks/main.yml
+- name: Configure PAM password quality
+  copy:
+    content: |
+      minlen = 14
+      dcredit = -1
+      ucredit = -1
+      ocredit = -1
+      lcredit = -1
+    dest: /etc/security/pwquality.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Set password reuse limits
+  lineinfile:
+    path: /etc/pam.d/password-auth
+    regexp: '^password\s+sufficient\s+pam_unix.so'
+    line: 'password sufficient pam_unix.so remember=5 sha512'
+    state: present
+
+- name: Set default umask
+  copy:
+    content: "umask 027"
+    dest: /etc/profile.d/umask.sh
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure TMOUT
+  copy:
+    content: |
+      TMOUT=600
+      readonly TMOUT
+      export TMOUT
+    dest: /etc/profile.d/tmout.sh
+    owner: root
+    group: root
+    mode: '0644'

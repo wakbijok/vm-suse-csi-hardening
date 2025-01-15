@@ -1,0 +1,9 @@
+---
+# roles/network/handlers/main.yml
+- name: reload sysctl
+  command: sysctl -p /etc/sysctl.d/50-network-hardening.conf
+
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted

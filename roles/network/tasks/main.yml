@@ -1,0 +1,19 @@
+---
+# roles/network/tasks/main.yml
+- name: Configure network security parameters
+  template:
+    src: network-security.conf.j2
+    dest: /etc/sysctl.d/50-network-hardening.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: reload sysctl
+
+- name: Configure SSH
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0600'
+  notify: restart sshd

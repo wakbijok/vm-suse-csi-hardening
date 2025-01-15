@@ -1,0 +1,13 @@
+---
+# site.yml
+- name: SLES CIS Hardening
+  hosts: sles_server
+  become: true
+  roles:
+    - initial_setup
+    - services
+    - network
+    - logging
+    - access_control
+    - system_maintenance
+    - level2_hardening
